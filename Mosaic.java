@@ -8,6 +8,10 @@ Purpose: To create a colored mosaic that shows a random pattern of colored circl
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.Timer;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 import java.awt.Container;
 import java.awt.GridLayout;
@@ -15,6 +19,7 @@ import java.awt.BorderLayout;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import java.awt.Graphics;
 import java.awt.Color;
@@ -83,7 +88,7 @@ class Tile extends JPanel {
     }
 
     //method written to get contrast color of whatever random we have so that the characters on the squares or rectangles are visible.
-    private static int GetContrastingColor(int colorIn) {
+    public static int GetContrastingColor(int colorIn) {
         return ((colorIn+128)%256);
     }
     
@@ -164,6 +169,27 @@ class TileFrame extends JFrame implements ActionListener {
         contentPane.add(gridPanel, BorderLayout.CENTER);
         gridPanel.setLayout(new GridLayout(12,12));
 
+        //Menu Code - randomize option + close application options present in menu
+        JMenuBar menuBarDrop = new JMenuBar();
+
+        JMenu toolMenu = new JMenu("Tools");
+        toolMenu.setMnemonic(KeyEvent.VK_F);
+        menuBarDrop.add(toolMenu);
+
+        JMenuItem shuffle = new JMenuItem("Shuffle", KeyEvent.VK_G);
+        shuffle.addActionListener(this);
+        toolMenu.add(shuffle);
+        toolMenu.addSeparator();
+
+        JMenuItem closeApplicaton = new JMenuItem("Exit Application", KeyEvent.VK_X);
+        closeApplicaton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+        toolMenu.add(closeApplicaton);
+        add(menuBarDrop, BorderLayout.NORTH);
+
         //array + for loop to populate each cell in grid with random content
         tilesArray = new ArrayList<Tile>();
         for (int i = 0; i < 144; i++) {
@@ -178,10 +204,12 @@ class TileFrame extends JFrame implements ActionListener {
     //event listener to repaint and shuffle up all content in gridPanel
     public void actionPerformed(ActionEvent e) {
         for(Tile cTile : tilesArray) {
+            cTile.SetRandomValue();
             System.out.println(cTile.toString());
         }
         repaint();
     }
+
 }
 
 public class Mosaic {
