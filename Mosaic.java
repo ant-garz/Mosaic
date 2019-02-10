@@ -26,11 +26,15 @@ import java.util.Random;
 class Tile extends JPanel {
     private int rValue,gValue,bValue;
     private String alphaChar;
+    private Boolean shapeRand;
+    private String shapeCode;
 
     Tile() {
         super();
         SetRandomValue();
     }
+
+    //ToDo new constructor for Tile Class
 
     final public void SetRandomValue() {
         rValue = GetNumberBetween(0,255);
@@ -41,6 +45,16 @@ class Tile extends JPanel {
         Random randValue = new Random();
         char randCharacter = (char) (randValue.nextInt(26) + 'a');
         alphaChar = Character.toString(randCharacter);
+
+        //randomize shape
+        if(GetNumberBetween(0,1) ==1){
+            shapeRand = true;
+            setShape("Circle");
+        }
+        else{
+            shapeRand = false;
+            setShape("Square");
+        }
     }
 
     public void paintComponent(Graphics graphic) {
@@ -52,7 +66,7 @@ class Tile extends JPanel {
         graphic.setColor(new Color(rValue,gValue,bValue));
         
         //if statement to see if we keep shape as rectangle or if we swap out for a circle
-        if(GetNumberBetween(0,1) ==1 ) {
+        if(shapeRand == true ) {
             graphic.fillOval(7, 5, panelWidth - 25, panelHeight - 5);
         }
         else{
@@ -65,17 +79,64 @@ class Tile extends JPanel {
         int stringX = (panelWidth/2) - 15;
         int stringY = (panelHeight/2) + 15;
 
-        //toDo - if statement to swap up if we do rand alpha chars or numbers
         graphic.drawString(alphaChar, stringX, stringY);
     }
 
+    //method written to get contrast color of whatever random we have so that the characters on the squares or rectangles are visible.
     private static int GetContrastingColor(int colorIn) {
         return ((colorIn+128)%256);
     }
     
-    private static int GetNumberBetween(int min, int max) {
-        Random myRandom = new Random();
-        return min + myRandom.nextInt(max-min+1);
+    //call this method to get # between min param in and max param in. Saves time to call this than to write out several lines to do same thing each time.
+    private static int GetNumberBetween(int minValue, int maxValue) {
+        Random myRandomNum = new Random();
+        return minValue + myRandomNum.nextInt(maxValue-minValue+1);
+    }
+
+    //setters + getters for color values, shape and alpha char
+    //setter for rValue
+    public final void setrValue (int rValueIn){
+        rValue = rValueIn;
+    }
+    //getter for rValue
+    public int getrValue (){
+        return rValue;
+    }
+    //setter for gValue
+    public final void setgValue(int gValueIn){
+        gValue = gValueIn;
+    }
+    //getter for gValue
+    public int getgValue(){
+        return gValue;
+    } 
+    //setter for bValue
+    public final void setbValue(int bValueIn){
+        bValue = bValueIn;
+    }
+    //getter for bValue
+    public int getbValue(){
+        return bValue;
+    }
+    //setter for shapeCode
+    public final void setShape(String shapeIn){
+        shapeCode = shapeIn;
+    }
+    public String getShape(){
+        return shapeCode;
+    }
+    //setter for alphaChar
+    public final void setAlphaChar(String alphaCharIn){
+        alphaChar = alphaCharIn;
+    }
+    //getter for alphaChar
+    public String getAlphaChar(){
+        return alphaChar;
+    }
+
+    public String toString(){
+            String superString = super.toString();
+            return String.format("--------------------New Tile Created!--------------------\nAttributes of Tile\nshapeCode: %s alphaChar: %s rValue: %d gValue: %d bValue: %d",getShape(), getAlphaChar(), getrValue(), getgValue(), getbValue());
     }
     
 }
@@ -109,14 +170,15 @@ class TileFrame extends JFrame implements ActionListener {
             Tile cTile = new Tile();
             gridPanel.add(cTile);
             tilesArray.add(cTile);
+            System.out.println(cTile.toString());
         }
-
     }
 
+    //might reimplement as stand-alone class if it makes it easier for rest of project
     //event listener to repaint and shuffle up all content in gridPanel
     public void actionPerformed(ActionEvent e) {
         for(Tile cTile : tilesArray) {
-            cTile.SetRandomValue();
+            System.out.println(cTile.toString());
         }
         repaint();
     }
@@ -124,7 +186,7 @@ class TileFrame extends JFrame implements ActionListener {
 
 public class Mosaic {
     public static void main(String [] args) {
-        System.out.println("Mosaic starting...");
+        System.out.println("Start Paint***\n");
 
         TileFrame myMosaicFrame = new TileFrame();
         myMosaicFrame.setVisible(true);
