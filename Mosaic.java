@@ -1,9 +1,9 @@
-/*
-Name: Anthony Garza
-Project: Mosaic
-Purpose: To create a colored mosaic that shows a random pattern of colored circles
-         and and squares with a random letter in the middle of the shape. When the "Randomize"
-         button is pressed, the tiles need to change at random.
+/**
+* @author Anthony Garza
+* Project: Mosaic
+* Purpose: To create a colored mosaic that shows a random pattern of colored circles
+*          and and squares with a random letter in the middle of the shape. When the "Randomize"
+*          button is pressed, the tiles need to change at random.
 */
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -34,12 +34,14 @@ class Tile extends JPanel {
     private Boolean shapeRand;
     private String shapeCode;
 
+    //Constructors for Tile. Second one is meant to take in the ArrayList of tiles created for the Mosaic
     Tile() {
         super();
         SetRandomValue();
     }
-
-    //ToDo new constructor for Tile Class
+    Tile(ArrayList<Tile> tilesIn){
+        SetRandomValue();
+    }
 
     final public void SetRandomValue() {
         rValue = GetNumberBetween(0,255);
@@ -200,7 +202,6 @@ class TileFrame extends JFrame implements ActionListener {
         }
     }
 
-    //might reimplement as stand-alone class if it makes it easier for rest of project
     //event listener to repaint and shuffle up all content in gridPanel
     public void actionPerformed(ActionEvent e) {
         for(Tile cTile : tilesArray) {
